@@ -1,139 +1,103 @@
-// Methods
 
-// append
-// html
-// attr
-// on
-// empty
-// css
+var random_result;
+var lost = 0;
+var win = 0;
+var previous = 0;
 
-var backgroundColor = [
-	'red',
-	'blue',
-	'orange',
-	'green',
-	'purple'
-]
+// Setters
+// Getters
 
+// $(".crystal").attr('class');
 
-// Array
-var quotes = [
-	'Nothing makes the earth seem so spacious as to have friends at a distance; they make the latitudes and longitudes.',
-	'No friendship is an accident.',
-	'A good friend is like a four-leaf clover; hard to find and lucky to have',
-	'I would rather walk with a friend in the dark, than alone in the light.',
-	'Friendship marks a life even more deeply than love. Love risks degenerating into obsession, friendship is never anything but sharing.'
-];
+var resetAndStart = function () {
 
+	$(".crystals").empty();
 
+	var images = [
+			'http://cdn.playbuzz.com/cdn/7a5d7935-6177-4be8-8b72-2a95ad2bcdfe/3b295cc9-7b5e-412f-8b1f-8547edd8e66b.jpg', 
+			'http://vignette3.wikia.nocookie.net/marvel-contestofchampions/images/1/1c/2-Star_Crystal.png/revision/latest?cb=20150825213642', 
+			'http://jonvilma.com/images/crystal-5.jpg', 
+			'https://static.turbosquid.com/Preview/2014/07/08__10_08_09/Crystals0010.jpgc22b2831-ae7a-4cb6-b4ac-612aa7f35ad7Original.jpg'];
+		
+	random_result = Math.floor(Math.random() * 69 ) + 30; 
 
 
+	$("#result").html('Random Result: ' + random_result);
 
+	for(var i = 0; i < 4; i++){
 
-	var num = Math.floor(Math.random() * quotes.length); // random number
+		var random = Math.floor(Math.random() * 11) + 1;
 
-	var randomQuotes = quotes[num]; // random quotes
+		var crystal = $("<div>");
+			crystal.attr({
+				"class": 'crystal',
+				"data-random": random
+			});
+			crystal.css({
+				"background-image":"url('" + images[i] + "')",
+				"background-size":"cover"
 
+			});
 
-	// var color = backgroundColor[num];
 
+		$(".crystals").append(crystal);
 
-	var content = $("<p>");
+	}
 
-		content.html(randomQuotes);
+	$("#previous").html("Total Score: " + previous);
 
-		content.attr({
-			"class":"quotes",
-			"data-name":"esterlin"
-		});
+}
 
-		content.css({
-			"border":"3px solid rgba(0, 0, 0, 0.3)",
-			"display": "flex",
-			"justify-content": "center",
-			"align-items": "center",
-			"height": "200px",
-			"box-shadow": "5px 5px 5px rgba(0, 0, 0, 0.5)"
-		});
 
-	$("#result").append(content);
+resetAndStart();
 
 
+// Event Delegation
+$(document).on('click', ".crystal", function () {
 
-	// Set a click button
+	var num = parseInt($(this).attr('data-random'));
 
-	console.log(window);
+	previous += num;
 
-	$("#random").on('click', function () {
 
-		num = Math.floor(Math.random() * quotes.length); // random number
+	$("#previous").html("Total score: " + previous);
 
-		randomQuotes = quotes[num]; // random quotes
+	console.log(previous);
 
-		// var color = backgroundColor[num];
+	if(previous > random_result){
 
+		lost++;
 
-		content.empty();
+		$("#lost").html("You lost: " + lost);
 
-		content.append(randomQuotes);
+		previous = 0;
 
-		// var color = backgroundColor[num];
+		resetAndStart();
 
-		// $("body").css('background', color);
+	} 
+	else if(previous === random_result){
 
-	});
+		win++;
 
+		$("#win").html("You win: " + win);
 
+		previous = 0;
 
+		resetAndStart();
 
+	}
 
+});
 
 
+// Speudo coding
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// a game with 4 crystal and Random Result
+// Every crystal needs to have a random number between 1 - 12
+// When clicking any CRYSTAL, it should adding with the previous result
+// Until it equals the Random Result
+// If it is greater than the Random Result, we decrement a lost counter
+// If it is equal, then we increment a win counter
+// A new random number should be generate every single time we win or lost
+// to those 4 crystals
 
