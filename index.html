@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>App</title>
 
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -10,16 +10,35 @@
 </head>
 <body>
 
-	<p id="result"></p>
-	
-	<div class="crystals">
+	<!-- Header section -->
+	<nav>
+		<h1>Weather App</h1>
+
+		<p>Trust, we are going to get you weather today, hopefully it's sunny</p>
+	</nav>
+
+
+	<!-- Weather Contents -->
+	<div class="weather">
+
+		<div class="containing">
+			<p id="loading"></p>
+			<h2></h2>
+			<p id="f"></p>
+			<button id="convert">Convert into C</button>
+			<img src="">
+			<p id="condition"></p>
+
+			<p id="status"></p>
+		</div>
 		
 	</div>
 
-	<p id="previous"></p>
-
-	<p id="win"></p>
-	<p id="lost"></p>
+	
+	<!-- Footer Section -->
+	<footer>
+		<p>@copyright by Esterling Accime</p>
+	</footer>
 
 	<script type="text/javascript" src="assets/js/app.js"></script>
 </body>

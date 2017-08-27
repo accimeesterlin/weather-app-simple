@@ -1,103 +1,100 @@
 
-var random_result;
-var lost = 0;
-var win = 0;
-var previous = 0;
+var endpoint = 'http://api.wunderground.com/api/067abeafb1e98bba/conditions/';
 
-// Setters
-// Getters
 
-// $(".crystal").attr('class');
+var parameters = 'q/GA/roswell.json';
 
-var resetAndStart = function () {
 
-	$(".crystals").empty();
 
-	var images = [
-			'http://cdn.playbuzz.com/cdn/7a5d7935-6177-4be8-8b72-2a95ad2bcdfe/3b295cc9-7b5e-412f-8b1f-8547edd8e66b.jpg', 
-			'http://vignette3.wikia.nocookie.net/marvel-contestofchampions/images/1/1c/2-Star_Crystal.png/revision/latest?cb=20150825213642', 
-			'http://jonvilma.com/images/crystal-5.jpg', 
-			'https://static.turbosquid.com/Preview/2014/07/08__10_08_09/Crystals0010.jpgc22b2831-ae7a-4cb6-b4ac-612aa7f35ad7Original.jpg'];
+$.ajax({
+	url:endpoint + parameters,
+	method:'GET'
+})
+.done(function (data) {
+
+	var f = data.current_observation.temp_f,
+
+		c = data.current_observation.temp_c,
+
+		icon = data.current_observation.icon_url,
+
+		status = data.current_observation.observation_time,
+
+		wind_moving = data.current_observation.wind_string,
+
+		weather_report = data.current_observation.weather,
+
+		location = data.current_observation.display_location;
+
+
+	var toggle = false;
+
+
+	var name = location.city + ', ' + location.state + ', ' + location.zip;
+
+		$("h2").html(name);
+		$("#f").html("Temparature: " + f + ' F');
+		$("img").attr('src', icon);
+		$("#condition").html(weather_report);
+		$("#status").html(status);
+
+	// $("#loading").html("Data loading...");
+
+	// setTimeout(function () {
 		
-	random_result = Math.floor(Math.random() * 69 ) + 30; 
+
+	// 	$("#loading").empty();
+	// }, 4000);
 
 
-	$("#result").html('Random Result: ' + random_result);
+	$("#convert").on('click', function () {
+		
+		if(toggle === false){
 
-	for(var i = 0; i < 4; i++){
+			$("#f").html("Temparature: " + f + ' F');
+			$("#convert").html("Convert into C");
+			toggle = true;
 
-		var random = Math.floor(Math.random() * 11) + 1;
+		} else{
 
-		var crystal = $("<div>");
-			crystal.attr({
-				"class": 'crystal',
-				"data-random": random
-			});
-			crystal.css({
-				"background-image":"url('" + images[i] + "')",
-				"background-size":"cover"
+			$("#f").html("Temparature: " + c + ' C');
+			$("#convert").html("Convert into F");
 
-			});
-
-
-		$(".crystals").append(crystal);
-
-	}
-
-	$("#previous").html("Total Score: " + previous);
-
-}
+			toggle = false;
+			
+		}
+	});
 
 
-resetAndStart();
 
 
-// Event Delegation
-$(document).on('click', ".crystal", function () {
-
-	var num = parseInt($(this).attr('data-random'));
-
-	previous += num;
 
 
-	$("#previous").html("Total score: " + previous);
+	console.group();
+		console.log(data);
+		console.log("Tempature: ", data.current_observation.temp_f, " F");
+		console.log("Tempature: ", data.current_observation.temp_c, " C");
+		console.log("Tempature: ", data.current_observation.icon_url, 'Icon');
+		console.log("Last updated: ", data.current_observation.observation_time, 'last updated');
+		console.log("Wind stable: ", data.current_observation.wind_string, 'stable');
+		console.log("weather condition: ", data.current_observation.weather, 'weather condition');
+		console.log("Location: ", data.current_observation.display_location, 'Location');
+	console.groupEnd();
 
-	console.log(previous);
+})
+.catch(function (err) {
 
-	if(previous > random_result){
-
-		lost++;
-
-		$("#lost").html("You lost: " + lost);
-
-		previous = 0;
-
-		resetAndStart();
-
-	} 
-	else if(previous === random_result){
-
-		win++;
-
-		$("#win").html("You win: " + win);
-
-		previous = 0;
-
-		resetAndStart();
-
-	}
+	$(".weather").html("Oopps, sorry, the server is down.");
 
 });
 
 
-// Speudo coding
+// <h1>Weather condition in Roswell, GA, 30076</h1>
+// 			<p>Temparature: 30 F</p>
+// 			<button>Convert into C</button>
+// 			<i>Icons over here</i>
+// 			<p>Weather Condition:  Mostly Cloudy weather condition</p>
 
-// a game with 4 crystal and Random Result
-// Every crystal needs to have a random number between 1 - 12
-// When clicking any CRYSTAL, it should adding with the previous result
-// Until it equals the Random Result
-// If it is greater than the Random Result, we decrement a lost counter
-// If it is equal, then we increment a win counter
-// A new random number should be generate every single time we win or lost
-// to those 4 crystals
+// 			<p>Last updated: Last Updated on August 26, 8:58 PM EDT last updated</p>
+
 
